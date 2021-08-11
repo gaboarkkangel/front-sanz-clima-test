@@ -21,5 +21,38 @@
               </div>
           </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title ">Nueva Operación</h4>
+                    <p class="card-category"> Agregue los elementos a sumar en cada campo</p>
+                </div>
+                <div class="card-body">
+                    <form (submit)="submit()" [formGroup]="createForm">
+                        <div class="form-group">
+                            <a class="btn btn-primary" (click)="agregarElemento()">Agregar Valor</a>
+                        </div>
+                        <div formArrayName="elementos" *ngFor="let elemento of elementos.controls; let i = index">
+                            <div [formGroupName]="i">
+                                <div class="form-group row">
+                                    <label class="col-md-1" [attr.for]="'elemento'+i"> Valor </label>
+                                    <div class="col-md-3">
+                                        <input type="text" [attr.id]="'elemento'+i" class="form-control" formControlName="elemento">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-danger" (click)="removerElemento(i)">Remover</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn btn-success" [disabled]="createForm.invalid || createForm.value.elementos.length === 0">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
 </div>
