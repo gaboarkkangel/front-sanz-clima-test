@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DashboardsService } from './dashboards.service';
 import * as Chartist from 'chartist';
 
 @Component({
@@ -8,11 +9,21 @@ import * as Chartist from 'chartist';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  countList: number;
+
+  constructor(private dashService: DashboardsService) { }
   
   ngOnInit() {
-
+    this.listAll();
       
+  }
+
+  listAll() { // obtine todos los registros de las operaciones de las sumas
+    this.dashService
+    .obtener()
+    .subscribe((response) => {
+      this.countList = Object.keys(response).length;
+    });
   }
 
 }
