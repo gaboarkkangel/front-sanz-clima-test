@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { HttpClient } from "@angular/common/http";
+import { Calculation } from "app/model/calculation";
 // import { Persona } from "./persona";
 
 @Injectable({
@@ -8,11 +9,16 @@ import { HttpClient } from "@angular/common/http";
 })
 export class DashboardsService {
   rutaApi = "http://localhost:3000/api/v1/";
-  path = "history";
+  pathHistory = "history";
+  pathCalc = "calc";
 
   constructor(private http: HttpClient) {}
 
   obtener() {
-    return this.http.get(`${this.rutaApi}` + this.path);
+    return this.http.get(`${this.rutaApi}` + this.pathHistory);
+  }
+
+  createCalc(calculation: Calculation) {
+    return this.http.post(`${this.rutaApi}` + this.pathCalc, calculation);
   }
 }

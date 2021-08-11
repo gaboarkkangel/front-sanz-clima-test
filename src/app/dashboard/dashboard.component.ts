@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardsService } from './dashboards.service';
+import { Calculation } from '../model/calculation';
 import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 @Component({
@@ -10,8 +11,9 @@ import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@ang
 export class DashboardComponent implements OnInit {
 
   createForm = this.fb.group({
-    elementos: this.fb.array([])
+    element: this.fb.array([])
   });
+  calculation : Calculation;
   countList: number;
 
   constructor(  private dashService: DashboardsService,
@@ -22,23 +24,24 @@ export class DashboardComponent implements OnInit {
     this.listAll();
   }
 
-  get elementos() {
-    return this.createForm.get('elementos') as FormArray;
+  get element() {
+    return this.createForm.get('element') as FormArray;
   }
 
   agregarElemento() {
     const elementoFormGroup = this.fb.group({
       elemento : ['', Validators.required]
     });
-    this.elementos.push(elementoFormGroup);
+    this.element.push(elementoFormGroup);
   }
 
   removerElemento(indice : number) {
-    this.elementos.removeAt(indice);
+    this.element.removeAt(indice);
   }
 
   refrescar() {
-    this.elementos.controls.splice(0, this.elementos.length);
+    this.element.controls.splice(0, this.element.length);
+    this.listAll();
   }
 
   listAll() { // obtine todos los registros de las operaciones de las sumas
@@ -49,12 +52,26 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  createOperation(items) {
+    this.dashService
+    .createCalc(items)
+    .subscribe( response => {
+      console.log(response);
+      this.refrescar();
+    }, e => {
+      console.log(e.error.message);
+      alert(e.error.message);
+    });
+  }
+
   submit() {
     if(!this.createForm.valid) {
       alert('Debe completar todos los campos');
     }
-
-    console.log(this.createForm.value);
+    let arrayElement = this.createForm.value.element;
+    console.log(arrayElement);
+    
+    this.createOperation(this.createForm.value);
   }
 
 }

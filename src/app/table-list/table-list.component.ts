@@ -24,6 +24,7 @@ export class TableListComponent implements OnInit {
       this.list = response;
       this.list.forEach(obj => {
         let jObj = JSON.parse(obj.element);
+        console.log(jObj)
         obj.element = jObj.item;
       });
       this.countList = Object.keys(response).length;
