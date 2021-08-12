@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardsService } from './dashboards.service';
 import { Calculation } from '../model/calculation';
-import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormArray, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +18,8 @@ export class DashboardComponent implements OnInit {
   countList: number;
 
   constructor(  private dashService: DashboardsService,
-                private fb: FormBuilder
+                private fb: FormBuilder,
+                private toastr: ToastrService
               ) { }
   
   ngOnInit() {
@@ -58,9 +60,10 @@ export class DashboardComponent implements OnInit {
     .subscribe( response => {
       console.log(response);
       this.refrescar();
+      this.toastr.success('La suma ha sido creada, puede consultar en el menú History List', 'Operación Creada')
     }, e => {
       console.log(e.error.message);
-      alert(e.error.message);
+      this.toastr.error(e.error.message, 'Error')
     });
   }
 
